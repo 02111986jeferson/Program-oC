@@ -1,0 +1,74 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <time.h>
+
+#define TAMANHO_TABULEIRO 10
+#define AGUA '~'
+#define NAVIO 'N'
+#define ACERTO 'X'
+#define ERRO 'O'
+
+// Função para inicializar o tabuleiro
+void inicializarTabuleiro(char tabuleiro[TAMANHO_TABULEIRO][TAMANHO_TABULEIRO]) {
+    for (int i = 0; i < TAMANHO_TABULEIRO; i++) {
+        for (int j = 0; j < TAMANHO_TABULEIRO; j++) {
+            tabuleiro[i][j] = AGUA;
+        }
+    }
+}
+
+// Função para imprimir o tabuleiro (exemplo simples)
+void imprimirTabuleiro(char tabuleiro[TAMANHO_TABULEIRO][TAMANHO_TABULEIRO]) {
+    printf("  0 1 2 3 4 5 6 7 8 9\n");
+    for (int i = 0; i < TAMANHO_TABULEIRO; i++) {
+        printf("%d ", i);
+        for (int j = 0; j < TAMANHO_TABULEIRO; j++) {
+            printf("%c ", tabuleiro[i][j]);
+        }
+        printf("\n");
+    }
+}
+
+int main() {
+    char tabuleiroJogador[TAMANHO_TABULEIRO][TAMANHO_TABULEIRO];
+    char tabuleiroOponente[TAMANHO_TABULEIRO][TAMANHO_TABULEIRO]; // O tabuleiro do oponente com as posições dos navios
+    char tabuleiroTiros[TAMANHO_TABULEIRO][TAMANHO_TABULEIRO];    // O tabuleiro do jogador para marcar os tiros no oponente
+
+    // Inicialização
+    inicializarTabuleiro(tabuleiroJogador);
+    inicializarTabuleiro(tabuleiroOponente);
+    inicializarTabuleiro(tabuleiroTiros);
+
+    // TODO: Implementar a lógica para posicionar navios (manualmente ou aleatoriamente)
+    // Exemplo: posicionar um navio no (0,0)
+    tabuleiroOponente[0][0] = NAVIO;
+
+    // Loop principal do jogo
+    int naviosRestantes = 1; // Simplificado para um navio
+
+    while (naviosRestantes > 0) {
+        int linha, coluna;
+        printf("\nSeu tabuleiro de tiros:\n");
+        imprimirTabuleiro(tabuleiroTiros);
+
+        printf("Insira a linha e a coluna para atirar (0-9): ");
+        scanf("%d %d", &linha, &coluna);
+
+        // Verificar o resultado do tiro
+        if (tabuleiroOponente[linha][coluna] == NAVIO) {
+            printf("Acertou!\n");
+            tabuleiroTiros[linha][coluna] = ACERTO;
+            tabuleiroOponente[linha][coluna] = ACERTO; // Marcar como acertado no tabuleiro real do oponente
+            naviosRestantes--;
+        } else if (tabuleiroOponente[linha][coluna] == AGUA) {
+            printf("Água!\n");
+            tabuleiroTiros[linha][coluna] = ERRO;
+        } else {
+            printf("Você já atirou aqui.\n");
+        }
+    }
+
+    printf("Parabéns, você afundou todos os navios!\n");
+
+    return 0;
+}
